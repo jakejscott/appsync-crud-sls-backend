@@ -1,0 +1,21 @@
+{
+  "name": "appsync-crud-sls-backend",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Backend for appsync CRUD using serverless framework",
+  "scripts": {
+    "sls": "sls"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "prettier": {
+    "printWidth": 120
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "serverless": "2.43.1",
+    "serverless-appsync-plugin": "1.11.3",
+    "serverless-esbuild": "1.12.0"
+  }
+}

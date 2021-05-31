@@ -1,0 +1,39 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Query {
+  getPost: Post!
+  getMyPosts: [Post!]!
+}
+
+type Mutation {
+  createPost(input: CreatePostInput!): Post!
+  updatePost(input: UpdatePostInput!): Post!
+  deletePost(input: DeletePostInput!): Post!
+}
+
+type Post {
+  id: ID!
+  userId: ID!
+  title: String!
+  body: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+input CreatePostInput {
+  title: String!
+  body: String
+}
+
+input UpdatePostInput {
+  id: ID!
+  title: String!
+  body: String
+}
+
+input DeletePostInput {
+  id: ID!
+}

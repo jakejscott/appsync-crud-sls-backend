@@ -1,1 +1,1 @@
-# appsync-crud-sls
+# appsync-crud-sls-backend
