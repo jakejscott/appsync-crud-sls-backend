@@ -34,3 +34,14 @@ export async function post_exists_in_posts_table(id: string): Promise<Post> {
   expect(item).toBeTruthy();
   return item as Post;
 }
+
+export async function post_not_exists_in_posts_table(id: string) {
+  logger.info({ id, postsTableName }, "Fetching post");
+
+  const { Item: item } = await ddbDoc.get({
+    TableName: postsTableName,
+    Key: { id: id },
+  });
+
+  expect(item).toBeFalsy();
+}

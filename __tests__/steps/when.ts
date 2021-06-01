@@ -6,6 +6,7 @@ import pino from "pino";
 import { handler as confirmUserSignup } from "../../functions/confirm-user-signup";
 import { CreatePostInput, handler as createPost } from "../../functions/create-post";
 import { handler as updatePost, UpdatePostInput } from "../../functions/update-post";
+import { handler as deletePost, DeletePostInput } from "../../functions/delete-post";
 import { AppSyncEvent, AppSyncResult } from "../../lib/appsync";
 import { Post } from "../../lib/entities";
 import { IAuthenticatedUser } from "./given";
@@ -100,6 +101,17 @@ export async function we_invoke_update_post(
   });
 
   const result = await updatePost(event, context);
+  return result;
+}
+
+export async function we_invoke_delete_post(user: IAuthenticatedUser, postId: string): Promise<AppSyncResult<Post>> {
+  const context = {};
+
+  const event: AppSyncEvent<DeletePostInput> = createAppSyncEvent(user, {
+    id: postId,
+  });
+
+  const result = await deletePost(event, context);
   return result;
 }
 
