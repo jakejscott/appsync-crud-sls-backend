@@ -3,7 +3,7 @@ import { PostConfirmationConfirmSignUpTriggerEvent } from "aws-lambda";
 import { get } from "env-var";
 import pino from "pino";
 import { handler as confirmUserSignup } from "../../functions/confirm-user-signup";
-import { CreateUserInput, handler as createPost } from "../../functions/create-post";
+import { CreatePostInput, handler as createPost } from "../../functions/create-post";
 import { AppSyncEvent, AppSyncResult } from "../../lib/appsync";
 import { Post } from "../../lib/entities";
 import { IAuthenticatedUser } from "./given";
@@ -75,7 +75,7 @@ export async function we_invoke_create_post(
 ): Promise<AppSyncResult<Post>> {
   const context = {};
 
-  const event: AppSyncEvent<CreateUserInput> = createAppSyncEvent(user, {
+  const event: AppSyncEvent<CreatePostInput> = createAppSyncEvent(user, {
     title: title,
     body: body,
   });
@@ -115,7 +115,7 @@ export async function a_user_calls_create_post(
     }
   `;
 
-  const variables = {
+  const variables: CreatePostInput = {
     title: title,
     body: body,
   };

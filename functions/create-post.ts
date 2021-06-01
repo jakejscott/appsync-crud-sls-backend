@@ -13,17 +13,17 @@ const logger = lambdaLogger();
 const ddb = new DynamoDBClient({});
 const ddbDoc = DynamoDBDocument.from(ddb);
 
-export type CreateUserInput = {
+export type CreatePostInput = {
   title: string;
   body: string | null;
 };
 
-const schema: SchemaOf<CreateUserInput> = object({
+const schema: SchemaOf<CreatePostInput> = object({
   title: string().required().max(100).defined(),
   body: string().max(1000).defined(),
 });
 
-export async function handler(event: AppSyncEvent<CreateUserInput>, contex: any): Promise<AppSyncResult<Post>> {
+export async function handler(event: AppSyncEvent<CreatePostInput>, contex: any): Promise<AppSyncResult<Post>> {
   try {
     logger.withRequest(event, contex);
     logger.info({ event }, "Event");
