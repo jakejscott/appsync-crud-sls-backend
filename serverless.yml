@@ -3,12 +3,16 @@ frameworkVersion: "2"
 
 plugins:
   - serverless-appsync-plugin
-  #- serverless-esbuild
+  - serverless-esbuild
+  - serverless-iam-roles-per-function
+  - serverless-export-env
 
 provider:
   name: aws
   runtime: nodejs12.x
   region: ${opt:region, 'us-east-1'}
+  environment:
+    STAGE: ${self:custom.stage}
 
 package:
   exclude:
@@ -16,11 +20,38 @@ package:
     - package.json
 
 custom:
+  region: ${opt:region, self:provider.region}
+  stage: ${opt:stage, self:provider.stage}
   appSync:
     - ${file(serverless.appsync-api.yml)}
+  esbuild:
+    packager: yarn
+    bundle: true
+    minify: false
+
+functions:
+  confirmUserSignup:
+    handler: functions/confirm-user-signup.handler
+    environment:
+      USERS_TABLE_NAME: !Ref UsersTable
+    iamRoleStatements:
+      - Effect: Allow
+        Action: "dynamodb:PutItem"
+        Resource: !GetAtt UsersTable.Arn
 
 resources:
   Resources:
+    UsersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        BillingMode: PAY_PER_REQUEST
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+
     CognitoUserPool:
       Type: AWS::Cognito::UserPool
       Properties:
@@ -35,6 +66,17 @@ resources:
             RequireSymbols: false
         UsernameAttributes:
           - email
+        LambdaConfig:
+          PostConfirmation: !GetAtt ConfirmUserSignupLambdaFunction.Arn
+
+    UserPoolInvokeConfirmUserSignupLambdaPermission:
+      Type: AWS::Lambda::Permission
+      Properties:
+        Action: "lambda:invokeFunction"
+        FunctionName: !Ref ConfirmUserSignupLambdaFunction
+        Principal: "cognito-idp.amazonaws.com"
+        SourceArn: !GetAtt CognitoUserPool.Arn
+
     WebUserPoolClient:
       Type: AWS::Cognito::UserPoolClient
       Properties:
@@ -47,5 +89,7 @@ resources:
         PreventUserExistenceErrors: ENABLED
 
   Outputs:
+    AwsRegion:
+      Value: ${self:custom.region}
     CognitoUserPoolId:
       Value: !Ref CognitoUserPool

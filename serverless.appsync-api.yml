@@ -2,7 +2,7 @@ name: appsync-crud-sls
 schema: schema.graphql
 authenticationType: AMAZON_COGNITO_USER_POOLS
 userPoolConfig:
-  awsRegion: ${opt:region, 'us-east-1'}
+  awsRegion: ${self:custom.region}
   defaultAction: ALLOW
   userPoolId: !Ref CognitoUserPool
 additionalAuthenticationProviders:
