@@ -5,8 +5,7 @@ import { get } from "env-var";
 import lambdaLogger from "pino-lambda";
 import { User } from "../lib/entities";
 
-const USERS_TABLE_NAME = get("USERS_TABLE_NAME").required().asString();
-
+const usersTableName = get("USERS_TABLE_NAME").required().asString();
 const logger = lambdaLogger();
 const ddb = new DynamoDBClient({});
 const ddbDoc = DynamoDBDocument.from(ddb);
@@ -26,7 +25,7 @@ export async function handler(
     };
 
     await ddbDoc.put({
-      TableName: USERS_TABLE_NAME,
+      TableName: usersTableName,
       Item: user,
       ConditionExpression: "attribute_not_exists(id)",
     });
