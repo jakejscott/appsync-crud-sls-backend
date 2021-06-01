@@ -36,14 +36,14 @@ describe("Given an authenticated user", () => {
       const updatedBody = chance.paragraph();
 
       beforeAll(async () => {
-        updatedPost = await when.a_user_calls_update_post(user, post.id, title, body);
+        updatedPost = await when.a_user_calls_update_post(user, post.id, updatedTitle, updatedBody);
       });
 
       it("Should return the updated post", () => {
         expect(updatedPost).toMatchObject({
           id: post.id,
-          title: title,
-          body: body,
+          title: updatedTitle,
+          body: updatedBody,
           userId: user.id,
         });
       });
