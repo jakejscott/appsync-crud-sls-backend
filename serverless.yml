@@ -15,6 +15,7 @@ provider:
     STAGE: ${self:custom.stage}
 
 package:
+  individually: true
   exclude:
     - package-lock.json
     - package.json
