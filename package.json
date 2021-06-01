@@ -7,7 +7,8 @@
     "export-env": "sls export-env",
     "deploy": "sls deploy",
     "integration-test": "jest --verbose ./__tests__/integration",
-    "e2e-test": "jest --verbose ./__tests__/e2e"
+    "e2e-test": "jest --verbose ./__tests__/e2e",
+    "unit-test": "jest --verbose ./__tests__/unit"
   },
   "prettier": {
     "printWidth": 120
