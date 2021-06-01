@@ -43,11 +43,20 @@ custom:
         field: createPost
         request: false
         response: response-mapping-template.vtl
+      - type: Mutation
+        dataSource: updatePostSource
+        field: updatePost
+        request: false
+        response: response-mapping-template.vtl
     dataSources:
       - type: AWS_LAMBDA
         name: createPostSource
         config:
           functionName: createPost
+      - type: AWS_LAMBDA
+        name: updatePostSource
+        config:
+          functionName: updatePost
 
 functions:
   confirmUserSignup:
@@ -66,6 +75,15 @@ functions:
     iamRoleStatements:
       - Effect: Allow
         Action: "dynamodb:PutItem"
+        Resource: !GetAtt PostsTable.Arn
+
+  updatePost:
+    handler: functions/update-post.handler
+    environment:
+      POSTS_TABLE_NAME: !Ref PostsTable
+    iamRoleStatements:
+      - Effect: Allow
+        Action: "dynamodb:UpdateItem"
         Resource: !GetAtt PostsTable.Arn
 
 resources:

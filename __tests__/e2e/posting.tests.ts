@@ -11,7 +11,7 @@ describe("Given an authenticated user", () => {
     user = await given.an_authenticated_user();
   });
 
-  describe("When they create a post", () => {
+  describe("When she creates a post", () => {
     let post: Post;
 
     const title = chance.sentence({ words: 5 });
@@ -26,6 +26,26 @@ describe("Given an authenticated user", () => {
         title: title,
         body: body,
         userId: user.id,
+      });
+    });
+
+    describe("When she updates a post", () => {
+      let updatedPost: Post;
+
+      const updatedTitle = chance.sentence({ words: 5 });
+      const updatedBody = chance.paragraph();
+
+      beforeAll(async () => {
+        updatedPost = await when.a_user_calls_update_post(user, post.id, title, body);
+      });
+
+      it("Should return the updated post", () => {
+        expect(updatedPost).toMatchObject({
+          id: post.id,
+          title: title,
+          body: body,
+          userId: user.id,
+        });
       });
     });
   });

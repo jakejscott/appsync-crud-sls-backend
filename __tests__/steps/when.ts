@@ -146,3 +146,36 @@ export async function a_user_calls_create_post(
   const data = await graphQLClient.request(mutation, variables, headers);
   return data.createPost;
 }
+
+export async function a_user_calls_update_post(
+  user: IAuthenticatedUser,
+  postId: string,
+  title: string,
+  body: string | null
+): Promise<Post> {
+  const mutation = gql`
+    mutation UpdatePost($id: ID!, $title: String!, $body: String) {
+      updatePost(input: { id: $id, title: $title, body: $body }) {
+        id
+        userId
+        title
+        body
+        createdAt
+        updatedAt
+      }
+    }
+  `;
+
+  const variables: UpdatePostInput = {
+    id: postId,
+    title: title,
+    body: body,
+  };
+
+  const headers = {
+    authorization: user.idToken,
+  };
+
+  const data = await graphQLClient.request(mutation, variables, headers);
+  return data.updatePost;
+}
