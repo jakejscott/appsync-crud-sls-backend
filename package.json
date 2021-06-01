@@ -19,7 +19,9 @@
     "@aws-sdk/util-dynamodb": "3.17.0",
     "env-var": "7.0.1",
     "pino": "6.11.3",
-    "pino-lambda": "2.0.0"
+    "pino-lambda": "2.0.0",
+    "ulid": "^2.3.0",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@tsconfig/node14": "1.0.0",
@@ -29,6 +31,8 @@
     "@types/pino": "6.3.8",
     "chance": "1.1.7",
     "dotenv": "10.0.0",
+    "graphql": "15.5.0",
+    "graphql-request": "3.4.0",
     "jest": "27.0.3",
     "serverless": "2.43.1",
     "serverless-appsync-plugin": "1.11.3",

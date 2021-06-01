@@ -22,12 +22,31 @@ package:
 custom:
   region: ${opt:region, self:provider.region}
   stage: ${opt:stage, self:provider.stage}
-  appSync:
-    - ${file(serverless.appsync-api.yml)}
   esbuild:
     packager: yarn
     bundle: true
     minify: false
+  appSync:
+    name: appsync-crud-sls
+    schema: schema.graphql
+    authenticationType: AMAZON_COGNITO_USER_POOLS
+    userPoolConfig:
+      awsRegion: ${self:custom.region}
+      defaultAction: ALLOW
+      userPoolId: !Ref CognitoUserPool
+    additionalAuthenticationProviders:
+      - authenticationType: AWS_IAM
+    mappingTemplates:
+      - type: Mutation
+        dataSource: createPostSource
+        field: createPost
+        request: false
+        response: response-mapping-template.vtl
+    dataSources:
+      - type: AWS_LAMBDA
+        name: createPostSource
+        config:
+          functionName: createPost
 
 functions:
   confirmUserSignup:
@@ -39,9 +58,29 @@ functions:
         Action: "dynamodb:PutItem"
         Resource: !GetAtt UsersTable.Arn
 
+  createPost:
+    handler: functions/create-post.handler
+    environment:
+      POSTS_TABLE_NAME: !Ref PostsTable
+    iamRoleStatements:
+      - Effect: Allow
+        Action: "dynamodb:PutItem"
+        Resource: !GetAtt PostsTable.Arn
+
 resources:
   Resources:
     UsersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        BillingMode: PAY_PER_REQUEST
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+
+    PostsTable:
       Type: AWS::DynamoDB::Table
       Properties:
         BillingMode: PAY_PER_REQUEST
@@ -95,3 +134,5 @@ resources:
       Value: !Ref CognitoUserPool
     WebUserPoolClientId:
       Value: !Ref WebUserPoolClient
+    AppSyncApiUrl:
+      Value: !GetAtt GraphQlApi.GraphQLUrl
