@@ -47,6 +47,21 @@ describe("Given an authenticated user", () => {
           userId: user.id,
         });
       });
+
+      describe("When she deletes a post", () => {
+        let deletedPost: Post;
+
+        beforeAll(async () => {
+          deletedPost = await when.a_user_calls_delete_post(user, post.id);
+        });
+
+        it("Should return the deleted post", () => {
+          expect(deletedPost).toMatchObject({
+            id: post.id,
+            userId: user.id,
+          });
+        });
+      });
     });
   });
 });

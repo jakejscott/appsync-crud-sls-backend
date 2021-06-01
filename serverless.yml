@@ -48,6 +48,11 @@ custom:
         field: updatePost
         request: false
         response: response-mapping-template.vtl
+      - type: Mutation
+        dataSource: deletePostSource
+        field: deletePost
+        request: false
+        response: response-mapping-template.vtl
     dataSources:
       - type: AWS_LAMBDA
         name: createPostSource
@@ -57,6 +62,10 @@ custom:
         name: updatePostSource
         config:
           functionName: updatePost
+      - type: AWS_LAMBDA
+        name: deletePostSource
+        config:
+          functionName: deletePost
 
 functions:
   confirmUserSignup:
@@ -84,6 +93,15 @@ functions:
     iamRoleStatements:
       - Effect: Allow
         Action: "dynamodb:UpdateItem"
+        Resource: !GetAtt PostsTable.Arn
+
+  deletePost:
+    handler: functions/delete-post.handler
+    environment:
+      POSTS_TABLE_NAME: !Ref PostsTable
+    iamRoleStatements:
+      - Effect: Allow
+        Action: "dynamodb:DeleteItem"
         Resource: !GetAtt PostsTable.Arn
 
 resources:

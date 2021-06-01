@@ -191,3 +191,29 @@ export async function a_user_calls_update_post(
   const data = await graphQLClient.request(mutation, variables, headers);
   return data.updatePost;
 }
+
+export async function a_user_calls_delete_post(user: IAuthenticatedUser, postId: string): Promise<Post> {
+  const mutation = gql`
+    mutation DeletePost($id: ID!) {
+      deletePost(input: { id: $id }) {
+        id
+        userId
+        title
+        body
+        createdAt
+        updatedAt
+      }
+    }
+  `;
+
+  const variables: DeletePostInput = {
+    id: postId,
+  };
+
+  const headers = {
+    authorization: user.idToken,
+  };
+
+  const data = await graphQLClient.request(mutation, variables, headers);
+  return data.deletePost;
+}
