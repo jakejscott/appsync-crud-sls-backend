@@ -1,13 +1,14 @@
 import { CognitoIdentityProvider } from "@aws-sdk/client-cognito-identity-provider";
 import { PostConfirmationConfirmSignUpTriggerEvent } from "aws-lambda";
 import { get } from "env-var";
+import { gql, GraphQLClient } from "graphql-request";
 import pino from "pino";
 import { handler as confirmUserSignup } from "../../functions/confirm-user-signup";
 import { CreatePostInput, handler as createPost } from "../../functions/create-post";
+import { handler as updatePost, UpdatePostInput } from "../../functions/update-post";
 import { AppSyncEvent, AppSyncResult } from "../../lib/appsync";
 import { Post } from "../../lib/entities";
 import { IAuthenticatedUser } from "./given";
-import { gql, GraphQLClient } from "graphql-request";
 
 const awsRegion = get("AWS_REGION").required().asString();
 const userPoolId = get("COGNITO_USER_POOL_ID").required().asString();
@@ -81,6 +82,24 @@ export async function we_invoke_create_post(
   });
 
   const result = await createPost(event, context);
+  return result;
+}
+
+export async function we_invoke_update_post(
+  user: IAuthenticatedUser,
+  postId: string,
+  title: string,
+  body: string
+): Promise<AppSyncResult<Post>> {
+  const context = {};
+
+  const event: AppSyncEvent<UpdatePostInput> = createAppSyncEvent(user, {
+    id: postId,
+    title: title,
+    body: body,
+  });
+
+  const result = await updatePost(event, context);
   return result;
 }
 
