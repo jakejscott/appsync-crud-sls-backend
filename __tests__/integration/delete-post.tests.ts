@@ -28,7 +28,7 @@ describe("Given an authenticated user has already created a post", () => {
     });
 
     it("Deletes the post in the posts dynamodb table", async () => {
-      await then.post_not_exists_in_posts_table(deletedPost.id);
+      await then.post_not_exists_in_posts_table(deletedPost.id, user.id);
 
       expect(deletedPost).toMatchObject<Post>({
         id: existingPost.id,

@@ -31,7 +31,7 @@ describe("Given an authenticated user has already created a post", () => {
     });
 
     it("Updates the post in the posts dynamodb table", async () => {
-      const post = await then.post_exists_in_posts_table(updatedPost.id);
+      const post = await then.post_exists_in_posts_table(updatedPost.id, user.id);
 
       expect(post).toMatchObject<Post>({
         id: existingPost.id,

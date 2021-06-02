@@ -23,24 +23,24 @@ export async function user_exists_in_users_table(id: string): Promise<User> {
   return item as User;
 }
 
-export async function post_exists_in_posts_table(id: string): Promise<Post> {
-  logger.info({ id, postsTableName }, "Fetching post");
+export async function post_exists_in_posts_table(id: string, userId: string): Promise<Post> {
+  logger.info({ id, userId, postsTableName }, "Fetching post");
 
   const { Item: item } = await ddbDoc.get({
     TableName: postsTableName,
-    Key: { id: id },
+    Key: { id: id, userId: userId },
   });
 
   expect(item).toBeTruthy();
   return item as Post;
 }
 
-export async function post_not_exists_in_posts_table(id: string) {
-  logger.info({ id, postsTableName }, "Fetching post");
+export async function post_not_exists_in_posts_table(id: string, userId: string) {
+  logger.info({ id, userId, postsTableName }, "Fetching post");
 
   const { Item: item } = await ddbDoc.get({
     TableName: postsTableName,
-    Key: { id: id },
+    Key: { id: id, userId: userId },
   });
 
   expect(item).toBeFalsy();

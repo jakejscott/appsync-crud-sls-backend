@@ -27,7 +27,7 @@ describe("Given an authenticated user", () => {
     });
 
     it("Saves the post in the posts dynamodb table", async () => {
-      const post = await then.post_exists_in_posts_table(postId);
+      const post = await then.post_exists_in_posts_table(postId, user.id);
 
       expect(post).toMatchObject<Post>({
         id: postId,

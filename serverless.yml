@@ -124,8 +124,12 @@ resources:
         KeySchema:
           - AttributeName: id
             KeyType: HASH
+          - AttributeName: userId
+            KeyType: RANGE
         AttributeDefinitions:
           - AttributeName: id
+            AttributeType: S
+          - AttributeName: userId
             AttributeType: S
 
     CognitoUserPool:

@@ -26,13 +26,15 @@ export async function handler(event: AppSyncEvent<DeletePostInput>, contex: any)
     logger.info({ event }, "Event");
 
     schema.validateSync(event.arguments.input);
-    const { id } = event.arguments.input;
 
-    logger.info({ id }, "Deleting post");
+    const { id } = event.arguments.input;
+    const { sub: userId } = event.identity;
+
+    logger.info({ id, userId }, "Deleting post");
 
     const { Attributes: item } = await ddbDoc.delete({
       TableName: postsTableName,
-      Key: { id: id },
+      Key: { id: id, userId: userId },
       ReturnValues: "ALL_OLD",
     });
 

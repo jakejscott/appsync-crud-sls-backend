@@ -30,12 +30,15 @@ export async function handler(event: AppSyncEvent<UpdatePostInput>, contex: any)
     logger.info({ event }, "Event");
 
     schema.validateSync(event.arguments.input);
+
     const { id, title, body } = event.arguments.input;
-    logger.info({ id }, "Updating post");
+    const { sub: userId } = event.identity;
+
+    logger.info({ id, userId }, "Updating post");
 
     const { Attributes: item } = await ddbDoc.update({
       TableName: postsTableName,
-      Key: { id: id },
+      Key: { id: id, userId: userId },
       UpdateExpression: "set #title = :title, #body = :body, #updatedAt = :updatedAt",
       ExpressionAttributeValues: {
         ":title": title,
