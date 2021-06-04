@@ -5,8 +5,9 @@ import { gql, GraphQLClient } from "graphql-request";
 import pino from "pino";
 import { handler as confirmUserSignup } from "../../functions/confirm-user-signup";
 import { CreatePostInput, handler as createPost } from "../../functions/create-post";
+import { DeletePostInput, handler as deletePost } from "../../functions/delete-post";
+import { GetPostInput, handler as getPost } from "../../functions/get-post";
 import { handler as updatePost, UpdatePostInput } from "../../functions/update-post";
-import { handler as deletePost, DeletePostInput } from "../../functions/delete-post";
 import { AppSyncEvent, AppSyncResult } from "../../lib/appsync";
 import { Post } from "../../lib/entities";
 import { IAuthenticatedUser } from "./given";
@@ -75,15 +76,11 @@ export async function we_invoke_create_post(
   title: string,
   body: string
 ): Promise<AppSyncResult<Post>> {
-  const context = {};
-
   const event: AppSyncEvent<CreatePostInput> = createAppSyncEvent(user, {
     title: title,
     body: body,
   });
-
-  const result = await createPost(event, context);
-  return result;
+  return await createPost(event, {});
 }
 
 export async function we_invoke_update_post(
@@ -92,27 +89,26 @@ export async function we_invoke_update_post(
   title: string,
   body: string
 ): Promise<AppSyncResult<Post>> {
-  const context = {};
-
   const event: AppSyncEvent<UpdatePostInput> = createAppSyncEvent(user, {
     id: postId,
     title: title,
     body: body,
   });
-
-  const result = await updatePost(event, context);
-  return result;
+  return await updatePost(event, {});
 }
 
 export async function we_invoke_delete_post(user: IAuthenticatedUser, postId: string): Promise<AppSyncResult<Post>> {
-  const context = {};
-
   const event: AppSyncEvent<DeletePostInput> = createAppSyncEvent(user, {
     id: postId,
   });
+  return await deletePost(event, {});
+}
 
-  const result = await deletePost(event, context);
-  return result;
+export async function we_invoke_get_post(user: IAuthenticatedUser, postId: string): Promise<AppSyncResult<Post>> {
+  const event: AppSyncEvent<GetPostInput> = createAppSyncEvent(user, {
+    id: postId,
+  });
+  return await getPost(event, {});
 }
 
 function createAppSyncEvent<T>(user: IAuthenticatedUser, args: T) {
