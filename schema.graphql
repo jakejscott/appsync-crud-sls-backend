@@ -4,7 +4,7 @@ schema {
 }
 
 type Query {
-  getPost: Post!
+  getPost(input: GetPostInput): Post!
   getPosts: [Post!]!
 }
 
@@ -35,5 +35,9 @@ input UpdatePostInput {
 }
 
 input DeletePostInput {
+  id: ID!
+}
+
+input GetPostInput {
   id: ID!
 }

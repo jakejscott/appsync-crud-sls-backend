@@ -21,15 +21,7 @@ describe("Given an authenticated user has already created a post", () => {
     it("It returns the correct post from dynamodb", async () => {
       const { data } = await when.we_invoke_get_post(user, existingPost.id);
       const post: Post = data!;
-
-      expect(post).toMatchObject<Post>({
-        id: existingPost.id,
-        userId: existingPost.userId,
-        title: existingPost.title,
-        body: existingPost.body,
-        createdAt: existingPost.createdAt,
-        updatedAt: existingPost.updatedAt,
-      });
+      expect(post).toMatchObject<Post>(existingPost);
     });
   });
 });

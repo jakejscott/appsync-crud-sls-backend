@@ -29,6 +29,18 @@ describe("Given an authenticated user", () => {
       });
     });
 
+    describe("When she gets a post", () => {
+      let getPost: Post;
+
+      beforeAll(async () => {
+        getPost = await when.a_user_calls_get_post(user, post.id);
+      });
+
+      it("Should return the post", () => {
+        expect(getPost).toMatchObject<Post>(post);
+      });
+    });
+
     describe("When she updates a post", () => {
       let updatedPost: Post;
 

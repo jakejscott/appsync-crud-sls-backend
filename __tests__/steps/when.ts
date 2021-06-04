@@ -213,3 +213,29 @@ export async function a_user_calls_delete_post(user: IAuthenticatedUser, postId:
   const data = await graphQLClient.request(mutation, variables, headers);
   return data.deletePost;
 }
+
+export async function a_user_calls_get_post(user: IAuthenticatedUser, postId: string): Promise<Post> {
+  const query = gql`
+    query GetPost($id: ID!) {
+      getPost(input: { id: $id }) {
+        id
+        userId
+        title
+        body
+        createdAt
+        updatedAt
+      }
+    }
+  `;
+
+  const variables: GetPostInput = {
+    id: postId,
+  };
+
+  const headers = {
+    authorization: user.idToken,
+  };
+
+  const data = await graphQLClient.request(query, variables, headers);
+  return data.getPost;
+}
