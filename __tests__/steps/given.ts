@@ -2,6 +2,8 @@ import { CognitoIdentityProvider } from "@aws-sdk/client-cognito-identity-provid
 import { Chance } from "chance";
 import { get } from "env-var";
 import pino from "pino";
+import { ulid } from "ulid";
+import { Post } from "../../lib/entities";
 
 const userPoolId = get("COGNITO_USER_POOL_ID").required().asString();
 const clientId = get("WEB_USER_POOL_CLIENT_ID").required().asString();
@@ -74,4 +76,20 @@ export async function an_authenticated_user(): Promise<IAuthenticatedUser> {
   };
 
   return user;
+}
+
+export function a_random_post(user: IAuthenticatedUser): Post {
+  const title = chance.sentence({ words: 5 });
+  const body = chance.paragraph();
+  const now = new Date().toISOString();
+
+  const post: Post = {
+    id: ulid(),
+    userId: user.id,
+    title: title,
+    body: body,
+    createdAt: now,
+    updatedAt: now,
+  };
+  return post;
 }

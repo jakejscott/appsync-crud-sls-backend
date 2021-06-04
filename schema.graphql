@@ -5,7 +5,7 @@ schema {
 
 type Query {
   getPost(input: GetPostInput): Post!
-  getPosts: [Post!]!
+  listPosts(input: ListPostsInput): ListPostsResult!
 }
 
 type Mutation {
@@ -40,4 +40,14 @@ input DeletePostInput {
 
 input GetPostInput {
   id: ID!
+}
+
+input ListPostsInput {
+  limit: Int!
+  nextToken: String
+}
+
+type ListPostsResult {
+  posts: [Post!]!
+  nextToken: String
 }

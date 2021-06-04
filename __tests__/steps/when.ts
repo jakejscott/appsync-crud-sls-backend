@@ -7,6 +7,7 @@ import { handler as confirmUserSignup } from "../../functions/confirm-user-signu
 import { CreatePostInput, handler as createPost } from "../../functions/create-post";
 import { DeletePostInput, handler as deletePost } from "../../functions/delete-post";
 import { GetPostInput, handler as getPost } from "../../functions/get-post";
+import { ListPostsInput, ListPostsResult, handler as listPosts } from "../../functions/list-posts";
 import { handler as updatePost, UpdatePostInput } from "../../functions/update-post";
 import { AppSyncEvent, AppSyncResult } from "../../lib/appsync";
 import { Post } from "../../lib/entities";
@@ -109,6 +110,18 @@ export async function we_invoke_get_post(user: IAuthenticatedUser, postId: strin
     id: postId,
   });
   return await getPost(event, {});
+}
+
+export async function we_invoke_list_posts(
+  user: IAuthenticatedUser,
+  limit: number,
+  nextToken: string | null
+): Promise<AppSyncResult<ListPostsResult>> {
+  const event: AppSyncEvent<ListPostsInput> = createAppSyncEvent(user, {
+    limit: limit,
+    nextToken: nextToken,
+  });
+  return await listPosts(event, {});
 }
 
 function createAppSyncEvent<T>(user: IAuthenticatedUser, args: T) {
@@ -238,4 +251,38 @@ export async function a_user_calls_get_post(user: IAuthenticatedUser, postId: st
 
   const data = await graphQLClient.request(query, variables, headers);
   return data.getPost;
+}
+
+export async function a_user_calls_list_posts(
+  user: IAuthenticatedUser,
+  limit: number,
+  nextToken: string | null
+): Promise<ListPostsResult> {
+  const query = gql`
+    query ListPosts($limit: Int!, $nextToken: String) {
+      listPosts(input: { limit: $limit, nextToken: $nextToken }) {
+        nextToken
+        posts {
+          id
+          userId
+          title
+          body
+          createdAt
+          updatedAt
+        }
+      }
+    }
+  `;
+
+  const variables: ListPostsInput = {
+    limit: limit,
+    nextToken: nextToken,
+  };
+
+  const headers = {
+    authorization: user.idToken,
+  };
+
+  const data = await graphQLClient.request(query, variables, headers);
+  return data.listPosts;
 }

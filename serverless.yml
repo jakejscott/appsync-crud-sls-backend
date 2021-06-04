@@ -69,6 +69,12 @@ custom:
         field: getPost
         request: false
         response: response-mapping-template.vtl
+      - type: Query
+        dataSource: listPostsSource
+        field: listPosts
+        request: false
+        response: response-mapping-template.vtl
+
     # Direct lambda resolver datasources
     dataSources:
       - type: AWS_LAMBDA
@@ -87,6 +93,10 @@ custom:
         name: getPostSource
         config:
           functionName: getPost
+      - type: AWS_LAMBDA
+        name: listPostsSource
+        config:
+          functionName: listPosts
 
 functions:
   # Handles the Cognito's `PostConfirmation` trigger event; adding a user to dynamodb.
@@ -144,6 +154,16 @@ functions:
         Action: "dynamodb:GetItem"
         Resource: !GetAtt PostsTable.Arn
 
+  listPosts:
+    handler: functions/list-posts.handler
+    environment:
+      POSTS_TABLE_NAME: !Ref PostsTable
+    iamRoleStatements:
+      # Allow the lambda the permission to 'query' posts in dynamodb.
+      - Effect: Allow
+        Action: "dynamodb:Query"
+        Resource: !GetAtt PostsTable.Arn
+
 resources:
   Resources:
     # Dynamodb table for storing users as they are confirmed in Cognito.
@@ -165,16 +185,16 @@ resources:
       Properties:
         BillingMode: PAY_PER_REQUEST
         KeySchema:
-          # The id of the post (ulid)
-          - AttributeName: id
-            KeyType: HASH
           # The authenticated users id.
           - AttributeName: userId
+            KeyType: HASH
+          # The id of the post (ulid)
+          - AttributeName: id
             KeyType: RANGE
         AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
           - AttributeName: userId
+            AttributeType: S
+          - AttributeName: id
             AttributeType: S
 
     # Cognito user pool used for user registration and authentication with the AppSync api.
