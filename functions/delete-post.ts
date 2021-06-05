@@ -3,7 +3,7 @@ import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 import { get } from "env-var";
 import lambdaLogger from "pino-lambda";
 import { object, SchemaOf, string } from "yup";
-import { AppSyncEvent, AppSyncResult, buildResult } from "../lib/appsync";
+import { AppSyncEvent, AppSyncResult, buildResult, getUserId } from "../lib/appsync";
 import { Post } from "../lib/entities";
 
 const postsTableName = get("POSTS_TABLE_NAME").required().asString();
@@ -28,7 +28,7 @@ export async function handler(event: AppSyncEvent<DeletePostInput>, contex: any)
     schema.validateSync(event.arguments.input);
 
     const { id } = event.arguments.input;
-    const { sub: userId } = event.identity;
+    const userId = getUserId(event);
 
     logger.info({ id, userId }, "Deleting post");
 

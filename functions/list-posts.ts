@@ -3,7 +3,7 @@ import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 import { get } from "env-var";
 import lambdaLogger from "pino-lambda";
 import { number, object, SchemaOf, string } from "yup";
-import { AppSyncEvent, AppSyncResult, buildResult } from "../lib/appsync";
+import { AppSyncEvent, AppSyncResult, buildResult, getUserId } from "../lib/appsync";
 import { Post } from "../lib/entities";
 
 const postsTableName = get("POSTS_TABLE_NAME").required().asString();
@@ -38,7 +38,7 @@ export async function handler(
     schema.validateSync(event.arguments.input);
 
     let { nextToken } = event.arguments.input;
-    const { sub: userId } = event.identity;
+    const userId = getUserId(event);
 
     let exclusiveStartKey: JSON | undefined = undefined;
     if (nextToken) {

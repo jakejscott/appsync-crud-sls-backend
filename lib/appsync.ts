@@ -1,10 +1,10 @@
 import { ValidationError } from "yup";
 
 export type AppSyncEvent<T> = {
-  identity: {
-    sub: string;
-    email: string;
-  };
+  identity?: {
+    sub?: string | null;
+    email?: string | null;
+  } | null;
   arguments: {
     input: T;
   };
@@ -34,6 +34,11 @@ export class InternalServerException extends AppSyncError {
   }
 }
 
+export class UnauthorizedException extends AppSyncError {
+  constructor(message?: string) {
+    super(message || "You are not authorized to make this call.", "UnauthorizedException");
+  }
+}
 export function buildResult<T>(response: T): AppSyncResult<T> {
   if (response instanceof ValidationError) {
     return {
@@ -59,4 +64,11 @@ export function buildResult<T>(response: T): AppSyncResult<T> {
       errorType: null,
     };
   }
+}
+
+export function getUserId<T>(event: AppSyncEvent<T>) {
+  if (!event.identity || !event.identity.sub) {
+    throw new UnauthorizedException("sub claim missing");
+  }
+  return event.identity.sub;
 }
