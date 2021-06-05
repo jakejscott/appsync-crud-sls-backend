@@ -6,6 +6,7 @@
     "sls": "sls",
     "export-env": "sls export-env",
     "export-env-staging": "sls export-env -s staging",
+    "export-env-production": "sls export-env -s production",
     "deploy": "sls deploy",
     "integration-test": "jest --verbose ./__tests__/integration",
     "e2e-test": "jest --verbose ./__tests__/e2e",
