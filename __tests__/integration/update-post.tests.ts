@@ -1,4 +1,5 @@
 import { Chance } from "chance";
+import { AppSyncResult } from "../../lib/appsync";
 import { dateRegex } from "../../lib/consts";
 import { Post } from "../../lib/entities";
 import * as given from "../steps/given";
@@ -41,6 +42,21 @@ describe("Given an authenticated user has already created a post", () => {
         createdAt: expect.stringMatching(dateRegex),
         updatedAt: expect.stringMatching(dateRegex),
       });
+    });
+  });
+
+  describe("When they update a post with invalid title", () => {
+    let appSyncResult: AppSyncResult<Post>;
+
+    beforeAll(async () => {
+      appSyncResult = await when.we_invoke_update_post(user, existingPost.id, "", "");
+    });
+
+    it("Returns a validation error", async () => {
+      expect(appSyncResult.data).toBeNull();
+      expect(appSyncResult.errorType).toBe("ValidationError");
+      expect(appSyncResult.errorInfo).toMatchObject(["title is a required field"]);
+      expect(appSyncResult.errorMessage).toBe("title is a required field");
     });
   });
 });

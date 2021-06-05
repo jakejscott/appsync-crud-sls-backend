@@ -39,4 +39,19 @@ describe("Given an authenticated user", () => {
       });
     });
   });
+
+  describe("When they create a post with invalid title", () => {
+    let appSyncResult: AppSyncResult<Post>;
+
+    beforeAll(async () => {
+      appSyncResult = await when.we_invoke_create_post(user, "", "");
+    });
+
+    it("Returns a validation error", async () => {
+      expect(appSyncResult.data).toBeNull();
+      expect(appSyncResult.errorType).toBe("ValidationError");
+      expect(appSyncResult.errorInfo).toMatchObject(["title is a required field"]);
+      expect(appSyncResult.errorMessage).toBe("title is a required field");
+    });
+  });
 });

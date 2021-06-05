@@ -1,3 +1,5 @@
+import { ValidationError } from "yup";
+
 export type AppSyncEvent<T> = {
   identity: {
     sub: string;
@@ -33,7 +35,14 @@ export class InternalServerException extends AppSyncError {
 }
 
 export function buildResult<T>(response: T): AppSyncResult<T> {
-  if (response instanceof AppSyncError) {
+  if (response instanceof ValidationError) {
+    return {
+      data: null,
+      errorInfo: response.errors,
+      errorType: response.name,
+      errorMessage: response.message,
+    };
+  } else if (response instanceof AppSyncError) {
     return {
       data: null,
       errorInfo: response.info,
