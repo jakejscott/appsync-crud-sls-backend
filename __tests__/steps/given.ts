@@ -29,7 +29,7 @@ export function a_random_user(): IUser {
   const first = chance.first({ nationality: "en" });
   const last = chance.last({ nationality: "en" });
   const suffix = chance.string({ length: 4, pool: "abcdefghijklmnopqrstuvwxyz" });
-  const email = `${first}.${last}.${suffix}@example.com`.toLowerCase();
+  const email = `jake.net+${first}.${last}.${suffix}@gmail.com`.toLowerCase();
 
   return {
     email: email,
