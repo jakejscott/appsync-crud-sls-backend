@@ -18,10 +18,10 @@ export type UpdatePostInput = {
   body: string | null;
 };
 
-const schema: SchemaOf<UpdatePostInput> = object({
+export const schema: SchemaOf<UpdatePostInput> = object({
   id: string().required().defined(),
   title: string().required().max(100).defined(),
-  body: string().max(1000).defined(),
+  body: string().nullable().max(1000).defined(),
 });
 
 export async function handler(event: AppSyncEvent<UpdatePostInput>, contex: any): Promise<AppSyncResult<Post>> {

@@ -13,7 +13,7 @@ const ddb = new DynamoDBClient({});
 const ddbDoc = DynamoDBDocument.from(ddb);
 
 export type ListPostsInput = {
-  limit: number;
+  limit: number | null;
   nextToken: string | null;
 };
 
@@ -22,8 +22,8 @@ export type ListPostsResult = {
   nextToken: string | null;
 };
 
-const schema: SchemaOf<ListPostsInput> = object({
-  limit: number().required().min(1).max(25),
+export const schema: SchemaOf<ListPostsInput> = object({
+  limit: number().nullable().min(1).max(25).defined(),
   nextToken: string().nullable().defined(),
 });
 
@@ -54,7 +54,7 @@ export async function handler(
       ExpressionAttributeNames: {
         "#userId": "userId",
       },
-      Limit: event.arguments.input.limit,
+      Limit: event.arguments.input.limit ?? 10,
       ScanIndexForward: false,
       ConsistentRead: false,
       Select: "ALL_ATTRIBUTES",

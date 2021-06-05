@@ -16,7 +16,7 @@ export type GetPostInput = {
   id: string;
 };
 
-const schema: SchemaOf<GetPostInput> = object({
+export const schema: SchemaOf<GetPostInput> = object({
   id: string().required().defined(),
 });
 

@@ -18,9 +18,9 @@ export type CreatePostInput = {
   body: string | null;
 };
 
-const schema: SchemaOf<CreatePostInput> = object({
+export const schema: SchemaOf<CreatePostInput> = object({
   title: string().required().max(100).defined(),
-  body: string().max(1000).defined(),
+  body: string().nullable().max(1000).defined(),
 });
 
 export async function handler(event: AppSyncEvent<CreatePostInput>, contex: any): Promise<AppSyncResult<Post>> {

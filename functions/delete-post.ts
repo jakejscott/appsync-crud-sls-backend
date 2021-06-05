@@ -16,7 +16,7 @@ export type DeletePostInput = {
   id: string;
 };
 
-const schema: SchemaOf<DeletePostInput> = object({
+export const schema: SchemaOf<DeletePostInput> = object({
   id: string().required().defined(),
 });
 
