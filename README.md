@@ -44,6 +44,33 @@ yarn export-env
 yarn e2e-test
 ```
 
+## Manual Testing
+
+Install the Thunder Client for VS Code https://www.thunderclient.io
+
+Create a collection by importing the file `thunder-collection-appsync-crud-sls-backend-dev.json` to Thunder client.
+
+Setup the following environment variables in Thunder.
+
+- `APPSYNC_URL`
+- `TOKEN`
+
+To get a valid token run `yarn signup` which will output JSON with an `idToken` which you can copy.
+
+```
+yarn export-env
+yarn signup
+```
+
+```json
+{
+  "id": "21bfa9a8-0382-4757-9533-649a21c0866e",
+  "email": "jake.net+cecilia.holmes.eldk@gmail.com",
+  "accessToken": "...",
+  "idToken": "..."
+}
+```
+
 ## CI/CD
 
 **IAM setup**

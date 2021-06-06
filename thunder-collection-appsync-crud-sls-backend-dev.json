@@ -1,0 +1,134 @@
+{
+  "client": "Thunder Client",
+  "collectionName": "appsync-crud-sls-backend-dev",
+  "dateExported": "2021-06-06T05:31:57.864Z",
+  "version": "1.1",
+  "folders": [],
+  "requests": [
+    {
+      "containerId": "",
+      "sortNum": 10000,
+      "headers": [
+        { "name": "Accept", "value": "*/*" },
+        { "name": "User-Agent", "value": "Thunder Client (https://www.thunderclient.io)" },
+        { "name": "Authorization", "value": "{{TOKEN}}" }
+      ],
+      "colId": "db1b7f6d-1e33-4a01-b162-c9be31a76b43",
+      "name": "create-post",
+      "url": "{{APPSYNC_URL}}",
+      "method": "POST",
+      "modified": "2021-06-06T05:31:34.213Z",
+      "created": "2021-06-05T23:39:57.489Z",
+      "_id": "4ba4c2a0-d2c7-4192-a579-6cc0c8b1e852",
+      "body": {
+        "type": "graphql",
+        "raw": "",
+        "graphql": {
+          "query": "mutation CreatePost($title: String!, $body: String) {\n  createPost(input: { title: $title, body: $body }) {\n    id\n    userId\n    title\n    body\n    createdAt\n    updatedAt\n  }\n}",
+          "variables": "{\n    \"title\": \"Hello World\",\n    \"body\": \"It's a great day!\"\n}"
+        }
+      },
+      "tests": []
+    },
+    {
+      "containerId": "",
+      "sortNum": 20000,
+      "headers": [
+        { "name": "Accept", "value": "*/*" },
+        { "name": "User-Agent", "value": "Thunder Client (https://www.thunderclient.io)" },
+        { "name": "Authorization", "value": "{{TOKEN}}" }
+      ],
+      "colId": "db1b7f6d-1e33-4a01-b162-c9be31a76b43",
+      "name": "update-post",
+      "url": "{{APPSYNC_URL}}",
+      "method": "POST",
+      "modified": "2021-06-06T05:31:10.745Z",
+      "created": "2021-06-05T23:54:23.690Z",
+      "_id": "4d7c22d8-34af-4da8-bb99-4eb557cb62a7",
+      "body": {
+        "type": "graphql",
+        "raw": "",
+        "graphql": {
+          "query": "mutation UpdatePost($id: ID!, $title: String!, $body: String) {\n  updatePost(input: { id: $id, title: $title, body: $body }) {\n    id\n    userId\n    title\n    body\n    createdAt\n    updatedAt\n  }\n}",
+          "variables": "{\n    \"id\": \"01F7FWT447Y02K9XVYPRGVC2EQ\",\n    \"title\": \"Hello from New Zealand!\",\n    \"body\": \"It's a great day!\"\n}"
+        }
+      },
+      "tests": []
+    },
+    {
+      "containerId": "",
+      "sortNum": 25000,
+      "headers": [
+        { "name": "Accept", "value": "*/*" },
+        { "name": "User-Agent", "value": "Thunder Client (https://www.thunderclient.io)" },
+        { "name": "Authorization", "value": "{{TOKEN}}" }
+      ],
+      "colId": "db1b7f6d-1e33-4a01-b162-c9be31a76b43",
+      "name": "delete-post",
+      "url": "{{APPSYNC_URL}}",
+      "method": "POST",
+      "modified": "2021-06-06T05:31:21.431Z",
+      "created": "2021-06-06T02:52:42.904Z",
+      "_id": "2ede72ac-af74-43ba-b921-6617b3ae94dc",
+      "body": {
+        "type": "graphql",
+        "raw": "",
+        "graphql": {
+          "query": "mutation DeletePost($id: ID!) {\n  deletePost(input: { id: $id }) {\n    id\n    userId\n    title\n    body\n    createdAt\n    updatedAt\n  }\n}",
+          "variables": "{\n    \"id\": \"01F7FWT447Y02K9XVYPRGVC2EQ\"\n}"
+        }
+      },
+      "tests": []
+    },
+    {
+      "containerId": "",
+      "sortNum": 30000,
+      "headers": [
+        { "name": "Accept", "value": "*/*" },
+        { "name": "User-Agent", "value": "Thunder Client (https://www.thunderclient.io)" },
+        { "name": "Authorization", "value": "{{TOKEN}}" }
+      ],
+      "colId": "db1b7f6d-1e33-4a01-b162-c9be31a76b43",
+      "name": "get-post",
+      "url": "{{APPSYNC_URL}}",
+      "method": "POST",
+      "modified": "2021-06-06T05:29:41.119Z",
+      "created": "2021-06-05T23:55:44.941Z",
+      "_id": "60ae7c83-206d-4c74-8285-b180402a33e5",
+      "body": {
+        "type": "graphql",
+        "raw": "",
+        "graphql": {
+          "query": "query GetPost($id: ID!) {\n  getPost(input: { id: $id }) {\n    id\n    userId\n    title\n    body\n    createdAt\n    updatedAt\n  }\n}",
+          "variables": "{\n    \"id\": \"01F7FKNG2EH2HV9WTRX3DS7PCV\"\n}"
+        }
+      },
+      "tests": []
+    },
+    {
+      "containerId": "",
+      "sortNum": 40000,
+      "headers": [
+        { "name": "Accept", "value": "*/*" },
+        { "name": "User-Agent", "value": "Thunder Client (https://www.thunderclient.io)" },
+        { "name": "Authorization", "value": "{{TOKEN}}" }
+      ],
+      "colId": "db1b7f6d-1e33-4a01-b162-c9be31a76b43",
+      "name": "list-posts",
+      "url": "{{APPSYNC_URL}}",
+      "method": "POST",
+      "modified": "2021-06-06T05:29:43.600Z",
+      "created": "2021-06-05T23:56:40.982Z",
+      "_id": "21eddc8d-5aaa-4241-ab85-ac72e80415db",
+      "body": {
+        "type": "graphql",
+        "raw": "",
+        "graphql": {
+          "query": "query ListPosts($limit: Int, $nextToken: String) {\n  listPosts(input: { limit: $limit, nextToken: $nextToken }) {\n    nextToken\n    posts {\n      id\n      userId\n      title\n      body\n      createdAt\n      updatedAt\n    }\n  }\n}",
+          "variables": "{\n\n}"
+        }
+      },
+      "tests": []
+    }
+  ]
+}
