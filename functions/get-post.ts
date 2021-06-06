@@ -3,7 +3,7 @@ import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 import { get } from "env-var";
 import lambdaLogger from "pino-lambda";
 import { object, SchemaOf, string } from "yup";
-import { AppSyncEvent, AppSyncResult, buildResult, getUserId } from "../lib/appsync";
+import { AppSyncEvent, AppSyncResult, buildResult, getUserId, NotFoundException } from "../lib/appsync";
 import { Post } from "../lib/entities";
 
 const postsTableName = get("POSTS_TABLE_NAME").required().asString();
@@ -32,10 +32,16 @@ export async function handler(event: AppSyncEvent<GetPostInput>, contex: any): P
 
     logger.info({ id, userId }, "Getting post");
 
+    try {
+    } catch (error) {}
     const { Item: item } = await ddbDoc.get({
       TableName: postsTableName,
       Key: { id: id, userId: userId },
     });
+
+    if (!item) {
+      throw new NotFoundException("Post not found", { postId: id });
+    }
 
     const post: Post = item as Post;
     logger.info({ post }, "Post found");

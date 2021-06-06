@@ -3,7 +3,7 @@ import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 import { get } from "env-var";
 import lambdaLogger from "pino-lambda";
 import { object, SchemaOf, string } from "yup";
-import { AppSyncEvent, AppSyncResult, buildResult, getUserId } from "../lib/appsync";
+import { AppSyncEvent, AppSyncResult, buildResult, getUserId, NotFoundException } from "../lib/appsync";
 import { Post } from "../lib/entities";
 
 const postsTableName = get("POSTS_TABLE_NAME").required().asString();
@@ -36,26 +36,34 @@ export async function handler(event: AppSyncEvent<UpdatePostInput>, contex: any)
 
     logger.info({ id, userId }, "Updating post");
 
-    const { Attributes: item } = await ddbDoc.update({
-      TableName: postsTableName,
-      Key: { id: id, userId: userId },
-      UpdateExpression: "set #title = :title, #body = :body, #updatedAt = :updatedAt",
-      ExpressionAttributeValues: {
-        ":title": title,
-        ":body": body ?? null,
-        ":updatedAt": new Date().toISOString(),
-      },
-      ExpressionAttributeNames: {
-        "#title": "title",
-        "#body": "body",
-        "#updatedAt": "updatedAt",
-      },
-      ReturnValues: "ALL_NEW",
-    });
+    try {
+      const { Attributes: item } = await ddbDoc.update({
+        TableName: postsTableName,
+        Key: { id: id, userId: userId },
+        UpdateExpression: "set #title = :title, #body = :body, #updatedAt = :updatedAt",
+        ConditionExpression: "attribute_exists(id)",
+        ExpressionAttributeValues: {
+          ":title": title,
+          ":body": body ?? null,
+          ":updatedAt": new Date().toISOString(),
+        },
+        ExpressionAttributeNames: {
+          "#title": "title",
+          "#body": "body",
+          "#updatedAt": "updatedAt",
+        },
+        ReturnValues: "ALL_NEW",
+      });
 
-    const post: Post = item as Post;
-    logger.info({ post }, "Post updated");
-    return buildResult(post);
+      const post: Post = item as Post;
+      logger.info({ post }, "Post updated");
+      return buildResult(post);
+    } catch (error) {
+      if (error.name == "ConditionalCheckFailedException") {
+        throw new NotFoundException("Post not found", { postId: id });
+      }
+      throw error;
+    }
   } catch (error) {
     logger.error({ error }, error.name);
     return buildResult(error);

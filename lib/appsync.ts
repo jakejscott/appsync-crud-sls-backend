@@ -39,6 +39,13 @@ export class UnauthorizedException extends AppSyncError {
     super(message || "You are not authorized to make this call.", "UnauthorizedException");
   }
 }
+
+export class NotFoundException extends AppSyncError {
+  constructor(message?: string, info: any = null) {
+    super(message || "Resource not found", "NotFound", info);
+  }
+}
+
 export function buildResult<T>(response: T): AppSyncResult<T> {
   if (response instanceof ValidationError) {
     return {

@@ -1,4 +1,5 @@
 import { Chance } from "chance";
+import { ulid } from "ulid";
 import { AppSyncResult } from "../../lib/appsync";
 import { dateRegex } from "../../lib/consts";
 import { Post } from "../../lib/entities";
@@ -29,6 +30,20 @@ describe("Given an authenticated user has already created a post", () => {
     beforeAll(async () => {
       const { data } = await when.we_invoke_update_post(user, existingPost.id, title, body);
       updatedPost = data!;
+    });
+
+    it("It returns an error when post is not found", async () => {
+      const bogusPostId = ulid();
+      const { data, errorMessage, errorType, errorInfo } = await when.we_invoke_update_post(
+        user,
+        bogusPostId,
+        title,
+        body
+      );
+      expect(data).toBeNull();
+      expect(errorType).toBe("NotFound");
+      expect(errorMessage).toBe("Post not found");
+      expect(errorInfo).toMatchObject({ postId: bogusPostId });
     });
 
     it("Updates the post in the posts dynamodb table", async () => {
