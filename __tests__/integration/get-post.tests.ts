@@ -25,7 +25,7 @@ describe("Given an authenticated user has already created a post", () => {
       expect(post).toMatchObject<Post>(existingPost);
     });
 
-    it("It returns an error when post is not found", async () => {
+    it("It returns an error when the post is not found", async () => {
       const bogusPostId = ulid();
       const { data, errorMessage, errorType, errorInfo } = await when.we_invoke_get_post(user, bogusPostId);
       expect(data).toBeNull();

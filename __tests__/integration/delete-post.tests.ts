@@ -1,4 +1,5 @@
 import { Chance } from "chance";
+import { ulid } from "ulid";
 import { dateRegex } from "../../lib/consts";
 import { Post } from "../../lib/entities";
 import * as given from "../steps/given";
@@ -25,6 +26,15 @@ describe("Given an authenticated user has already created a post", () => {
     beforeAll(async () => {
       const { data } = await when.we_invoke_delete_post(user, existingPost.id);
       deletedPost = data!;
+    });
+
+    it("It returns an error when the post is not found", async () => {
+      const bogusPostId = ulid();
+      const { data, errorMessage, errorType, errorInfo } = await when.we_invoke_delete_post(user, bogusPostId);
+      expect(data).toBeNull();
+      expect(errorType).toBe("NotFound");
+      expect(errorMessage).toBe("Post not found");
+      expect(errorInfo).toMatchObject({ postId: bogusPostId });
     });
 
     it("Deletes the post in the posts dynamodb table", async () => {
