@@ -28,12 +28,6 @@ export class AppSyncError extends Error {
   }
 }
 
-export class InternalServerException extends AppSyncError {
-  constructor(message?: string) {
-    super(message || "There was an internal server error.", "InternalServerException");
-  }
-}
-
 export class UnauthorizedException extends AppSyncError {
   constructor(message?: string) {
     super(message || "You are not authorized to make this call.", "UnauthorizedException");
