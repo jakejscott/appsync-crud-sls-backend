@@ -43,7 +43,7 @@ input GetPostInput {
 }
 
 input ListPostsInput {
-  limit: Int!
+  limit: Int
   nextToken: String
 }
 

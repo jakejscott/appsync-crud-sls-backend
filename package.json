@@ -10,7 +10,8 @@
     "deploy": "sls deploy",
     "integration-test": "jest --verbose ./__tests__/integration",
     "e2e-test": "jest --verbose ./__tests__/e2e",
-    "unit-test": "jest --verbose ./__tests__/unit"
+    "unit-test": "jest --verbose ./__tests__/unit",
+    "signup": "ts-node ./scripts/signup.ts"
   },
   "prettier": {
     "printWidth": 120

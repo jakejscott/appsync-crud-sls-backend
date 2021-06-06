@@ -13,8 +13,8 @@ const ddb = new DynamoDBClient({});
 const ddbDoc = DynamoDBDocument.from(ddb);
 
 export type ListPostsInput = {
-  limit: number | null;
-  nextToken: string | null;
+  limit?: number | null;
+  nextToken?: string | null;
 };
 
 export type ListPostsResult = {
@@ -23,8 +23,8 @@ export type ListPostsResult = {
 };
 
 export const schema: SchemaOf<ListPostsInput> = object({
-  limit: number().nullable().min(1).max(25).defined(),
-  nextToken: string().nullable().defined(),
+  limit: number().nullable().min(1).max(25),
+  nextToken: string().nullable(),
 });
 
 export async function handler(

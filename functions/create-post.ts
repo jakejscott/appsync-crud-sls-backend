@@ -15,12 +15,12 @@ const ddbDoc = DynamoDBDocument.from(ddb);
 
 export type CreatePostInput = {
   title: string;
-  body: string | null;
+  body?: string | null;
 };
 
 export const schema: SchemaOf<CreatePostInput> = object({
   title: string().required().max(100).defined(),
-  body: string().nullable().max(1000).defined(),
+  body: string().nullable().max(1000),
 });
 
 export async function handler(event: AppSyncEvent<CreatePostInput>, contex: any): Promise<AppSyncResult<Post>> {
@@ -38,7 +38,7 @@ export async function handler(event: AppSyncEvent<CreatePostInput>, contex: any)
       id: ulid(),
       userId: userId,
       title: title,
-      body: body,
+      body: body ?? null,
       createdAt: now,
       updatedAt: now,
     };

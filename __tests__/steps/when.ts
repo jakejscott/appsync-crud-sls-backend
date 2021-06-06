@@ -259,7 +259,7 @@ export async function a_user_calls_list_posts(
   nextToken: string | null
 ): Promise<ListPostsResult> {
   const query = gql`
-    query ListPosts($limit: Int!, $nextToken: String) {
+    query ListPosts($limit: Int, $nextToken: String) {
       listPosts(input: { limit: $limit, nextToken: $nextToken }) {
         nextToken
         posts {

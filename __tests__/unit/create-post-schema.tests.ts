@@ -32,15 +32,6 @@ describe("When creating a post", () => {
     ).not.toThrow();
   });
 
-  it("body cannot be undefined", () => {
-    expect(() =>
-      schema.validateSync({
-        title: chance.string({ length: 10 }),
-        body: undefined,
-      })
-    ).toThrow(new ValidationError("body must be defined"));
-  });
-
   it("body cannot exceed 1000 chars", () => {
     expect(() =>
       schema.validateSync({

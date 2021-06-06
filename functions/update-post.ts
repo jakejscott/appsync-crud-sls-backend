@@ -15,13 +15,13 @@ const ddbDoc = DynamoDBDocument.from(ddb);
 export type UpdatePostInput = {
   id: string;
   title: string;
-  body: string | null;
+  body?: string | null;
 };
 
 export const schema: SchemaOf<UpdatePostInput> = object({
   id: string().required().defined(),
   title: string().required().max(100).defined(),
-  body: string().nullable().max(1000).defined(),
+  body: string().nullable().max(1000),
 });
 
 export async function handler(event: AppSyncEvent<UpdatePostInput>, contex: any): Promise<AppSyncResult<Post>> {
@@ -42,7 +42,7 @@ export async function handler(event: AppSyncEvent<UpdatePostInput>, contex: any)
       UpdateExpression: "set #title = :title, #body = :body, #updatedAt = :updatedAt",
       ExpressionAttributeValues: {
         ":title": title,
-        ":body": body,
+        ":body": body ?? null,
         ":updatedAt": new Date().toISOString(),
       },
       ExpressionAttributeNames: {

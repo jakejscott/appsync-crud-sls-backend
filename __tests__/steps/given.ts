@@ -46,8 +46,6 @@ export async function an_authenticated_user(): Promise<IAuthenticatedUser> {
     ClientId: clientId,
   });
 
-  expect(id).toBeTruthy();
-
   logger.info({ email, id }, "User has signed up");
 
   await cognito.adminConfirmSignUp({
