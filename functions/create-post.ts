@@ -26,7 +26,6 @@ export const schema: SchemaOf<CreatePostInput> = object({
 export async function handler(event: AppSyncEvent<CreatePostInput>, contex: any): Promise<AppSyncResult<Post>> {
   try {
     logger.withRequest(event, contex);
-    logger.info({ event }, "Event");
 
     schema.validateSync(event.arguments.input);
     const { title, body } = event.arguments.input;

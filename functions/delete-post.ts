@@ -23,7 +23,6 @@ export const schema: SchemaOf<DeletePostInput> = object({
 export async function handler(event: AppSyncEvent<DeletePostInput>, contex: any): Promise<AppSyncResult<Post>> {
   try {
     logger.withRequest(event, contex);
-    logger.info({ event }, "Event");
 
     schema.validateSync(event.arguments.input);
 

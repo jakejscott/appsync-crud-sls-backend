@@ -33,7 +33,6 @@ export async function handler(
 ): Promise<AppSyncResult<ListPostsResult>> {
   try {
     logger.withRequest(event, contex);
-    logger.info({ event }, "Event");
 
     schema.validateSync(event.arguments.input);
 
