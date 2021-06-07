@@ -15,7 +15,6 @@ export async function handler(
   contex: any
 ): Promise<PostConfirmationConfirmSignUpTriggerEvent> {
   logger.withRequest(event, contex);
-  logger.info(event, "Event");
 
   if (event.triggerSource == "PostConfirmation_ConfirmSignUp") {
     const user: User = {
